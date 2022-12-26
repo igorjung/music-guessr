@@ -1,0 +1,91 @@
+@import '../../styles/theme.scss';
+
+.artist_wrapper {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.artist_header {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  padding-top: 64px;
+
+  .artist_bio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 100px;
+    }
+
+    strong {
+      font-size: 32px;
+      margin-top: 8px;
+    }
+  }
+
+  .artist_score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    strong {
+      font-size: 32px;
+    }
+  }
+}
+
+.artist_section {
+  width: 100%;
+  margin-top: 64px;
+
+  .artist_grid {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+    grid-template-columns: repeat(3, 280px);
+    gap: 32px;
+  }
+}
+
+.timer_showcase {
+  width: 120px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  border-radius: 20px;
+  background-color: $white;
+
+  padding: 0 10px;
+
+  img {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+  }
+
+  strong {
+    font-size: 18px;
+    margin-left: 4px;
+    color: $black;
+  }
+}

@@ -1,0 +1,17 @@
+<div class="modal_wrapper" *ngIf="isOpen">
+  <div class="modal_content">
+    <header class="modal_header">
+      <div></div>
+      <strong>{{ title }}</strong>
+      <button (click)="onClose()">
+        <img src="../../../../assets/icons/close.png" alt="close">
+      </button>
+    </header>
+    <section class="modal_section">
+      <p>{{ body }}</p>
+      <div class="modal_footer">
+        <button (click)="onClose()">{{ label }}</button>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+button {
+  background: none;
+  border: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 5px;
+  border-radius: 10px;
+
+  &.primary {
+    background-color: #fff;
+    border: 2px solid #000;
+    color: #000;
+
+    :hover {
+      background-color: #000;
+      color: #fff;
+    }
+  }
+
+  &.secondary {
+    background-color: #000;
+    color: #fff;
+
+    :hover {
+      background-color: #fff;
+      color: #000;
+    }
+  }
+
+  :disabled {
+    background-color: #ddd;
+    color: #666;
+    cursor: not-allowed;
+  }
+}

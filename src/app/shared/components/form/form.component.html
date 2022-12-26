@@ -1,0 +1,30 @@
+<div class="form_wrapper">
+  <img
+    [src]="album.images[0].url"
+    [alt]="album.name"
+    [ngClass]="{
+      'card_answer': true,
+      'is_correct': isCorrect,
+      'is_incorrect': gameOver && !isCorrect
+    }"
+  >
+  <div
+    *ngIf="!(isCorrect || gameOver); else answer"
+    class="form_field"
+  >
+    <input
+      name="cardInput"
+      #cardInput
+      (change)="onSubmit(cardInput.value)"
+    >
+    <span>{{ album.release_date }}</span>
+  </div>
+</div>
+
+<ng-template class="form_answer" #answer>
+  <div class="form_answer">
+    <strong>{{ album.name }}</strong>
+    <small>{{ album.release_date }}</small>
+  </div>
+</ng-template>
+

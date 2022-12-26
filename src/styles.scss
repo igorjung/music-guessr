@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
+
+@import './app/styles/button.scss';
+@import './app/styles/input.scss';
+@import './app/styles/grid.scss';
+@import './app/styles/theme.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+  background-color: $black;
+  color: $white;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+ul, li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}

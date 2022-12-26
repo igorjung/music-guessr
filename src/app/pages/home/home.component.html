@@ -1,0 +1,13 @@
+<header class="home_header">
+  <app-search></app-search>
+</header>
+
+<section class="home_section">
+  <h1>Popular in your region</h1>
+
+  <ul class="home_grid">
+    <li *ngFor="let artist of artists">
+      <app-card [artist]="artist"></app-card>
+    </li>
+  </ul>
+</section>

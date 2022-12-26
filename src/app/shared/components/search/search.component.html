@@ -1,0 +1,27 @@
+<div class="search_wrapper" [ngClass]="{ 'is_open': list.length > 0}">
+  <button
+    class="search_button"
+    (click)="onSearch(searchInput.value)"
+  >
+    <img src="../../../../assets/icons/search.png" alt="search">
+  </button>
+  <input
+    name="search"
+    type="text"
+    class="search_input"
+    placeholder="Search for an artist..."
+    (change)="onSearch(searchInput.value)"
+    #searchInput
+  />
+  <ul
+    class="search_list"
+    *ngIf="list.length > 0"
+  >
+    <li class="search_item" *ngFor="let artist of list">
+      <a [href]="'/' + artist.id">
+        <img [src]="artist.images[0].url" [alt]="artist.id">
+        <strong>{{ artist.name }}</strong>
+      </a>
+    </li>
+  </ul>
+</div>
