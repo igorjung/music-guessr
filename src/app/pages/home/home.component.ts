@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ArtistInterface } from 'src/app/interfaces';
 import { SearchService } from 'src/app/shared/services';
 
@@ -7,11 +8,13 @@ import { SearchService } from 'src/app/shared/services';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   artists!: ArtistInterface[];
+  subscription!: Subscription;
+  loading: boolean =  false;
 
   constructor(
-    private searchService: SearchService
+    private searchService: SearchService,
   ) {}
 
   getUserRegion(): string {
@@ -19,15 +22,24 @@ export class HomeComponent implements OnInit {
     return region;
   }
 
-  ngOnInit(): void {
+  getPopularArtists() {
     const region = this.getUserRegion();
 
-    this.searchService.searchPopularArtis(region).subscribe({
+    this.subscription = this.searchService.searchPopularArtis(region).subscribe({
       next: (res) => {
-        console.log(res);
         this.artists = res.artists.items
+        this.loading = false;
       },
       error: (err) => console.log(err),
     })
+  }
+
+  ngOnInit(): void {
+    this.loading = true;
+    this.getPopularArtists();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

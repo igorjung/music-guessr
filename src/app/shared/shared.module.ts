@@ -2,14 +2,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AuthService } from './services';
-import { SearchComponent } from './components/search/search.component';
-import { CardComponent } from './components/card/card.component';
-import { FormComponent } from './components/form/form.component';
-import { TimePipe } from './pipes/time.pipe';
-import { ModalComponent } from './components/modal/modal.component';
-
+import pipes from './pipes';
+import components from './components';
+import services from './services';
+import interceptors, { AuthInterceptor } from './interceptors';
 
 @NgModule({
   imports: [
@@ -18,28 +16,29 @@ import { ModalComponent } from './components/modal/modal.component';
     FormsModule
   ],
   declarations: [
-    SearchComponent,
-    CardComponent,
-    FormComponent,
-    TimePipe,
-    ModalComponent,
+    ...pipes,
+    ...components,
   ],
   exports: [
-    SearchComponent,
-    CardComponent,
-    FormComponent,
-    ModalComponent,
-    TimePipe,
+    ...pipes,
+    ...components,
   ],
-  entryComponents: []
+  entryComponents: [],
+  providers: [
+   {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+   },
+   ...interceptors,
+   ...services
+  ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [
-        AuthService
-      ]
+      providers: []
     };
   }
 }

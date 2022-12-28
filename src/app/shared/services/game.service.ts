@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GameInterface } from 'src/app/interfaces/game.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class GameService {
   timeLeft: number = 60;
 

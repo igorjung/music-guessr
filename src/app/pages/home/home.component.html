@@ -2,7 +2,7 @@
   <app-search></app-search>
 </header>
 
-<section class="home_section">
+<section class="home_section" *ngIf="!loading; else loadComponent">
   <h1>Popular in your region</h1>
 
   <ul class="home_grid">
@@ -11,3 +11,7 @@
     </li>
   </ul>
 </section>
+
+<ng-template #loadComponent>
+  <app-loading></app-loading>
+</ng-template>
