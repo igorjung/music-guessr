@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArtistInterface } from 'src/app/interfaces';
-import { SearchService } from 'src/app/shared/services';
+import { ModalService, SearchService } from 'src/app/shared/services';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +14,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
   loading: boolean =  false;
 
+  isErrorVisible: boolean = false;
+  message: string = '';
+
   constructor(
     private searchService: SearchService,
+    private modalService: ModalService,
+    private router: Router
   ) {}
 
   getUserRegion(): string {
@@ -30,8 +36,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.artists = res.artists.items
         this.loading = false;
       },
-      error: (err) => console.log(err),
-    })
+      error: (err) => {
+        console.log(err);
+        this.modalService.onOpen({
+          isOpen: true,
+          title: 'An error occurred',
+          message: 'message',
+          label: 'Close',
+        });
+        this.loading = false;
+      }
+    });
+  }
+
+  returnToHome() {
+    this.router.navigate(['/']);
   }
 
   ngOnInit(): void {

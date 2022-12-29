@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GameInterface } from 'src/app/interfaces/game.interface';
+import { GameInterface } from 'src/app/interfaces';
 
 @Injectable()
 export class GameService {
@@ -25,18 +25,16 @@ export class GameService {
     this.timeLeft = this.setTime(this.total);
 
     return new Observable((observer) => {
-      setInterval(() => {
-        if(this.timeLeft > 0 && this.score < this.total) {
-          this.timeLeft--;
-          observer.next({
-            message: 'Time is runing',
-            timeLeft: this.timeLeft,
-            score: this.score,
-          })
-        } else  {
-          observer.next(this.onGameOver())
-        }
-      }, 1000);
+      if(this.timeLeft > 0 && this.score < this.total) {
+        this.timeLeft--;
+        observer.next({
+          message: 'Time is runing',
+          timeLeft: this.timeLeft,
+          score: this.score,
+        })
+      } else  {
+        observer.next(this.onGameOver())
+      }
     })
   }
 

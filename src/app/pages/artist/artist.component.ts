@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AlbumInterface, ArtistInterface } from 'src/app/interfaces';
-import { ArtistService, GameService } from 'src/app/shared/services';
+import { ArtistService, GameService, ModalService } from 'src/app/shared/services';
 
 @Component({
   selector: 'app-artist',
@@ -17,23 +17,34 @@ export class ArtistComponent implements OnInit, OnDestroy {
   total: number = 0;
   timeLeft: number = 0;
   gameOver: boolean = false;
-  message: string = '';
 
-  isWarningVisible: boolean = false;
   gameSubscription!: Subscription;
+  loading: boolean = false;
 
   constructor(
     private artistService: ArtistService,
     public gameService: GameService,
+    private modalService: ModalService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+      this.loading = true;
+
       this.artistService.getArtist(params['id']).subscribe({
         next: (res) => this.artist = res,
-        error: (err) => console.log(err)
+        error: (err) => {
+          console.log(err);
+          this.modalService.onOpen({
+            isOpen: true,
+            title: 'An error occurred',
+            message: 'message',
+            label: 'Close',
+          });
+          this.loading = false;
+        }
       });
 
       this.artistService.getArtistAlbums(params['id']).subscribe({
@@ -61,9 +72,24 @@ export class ArtistComponent implements OnInit, OnDestroy {
 
           this.albums = savedAlbums;
           this.total = this.albums.length;
-          this.isWarningVisible = true;
+          this.loading = false;
+          this.modalService.onOpen({
+            isOpen: true,
+            title: 'Warning',
+            message: 'The game begins when you press "Start", and then you have a certain amount of time to guess all albums by this artist.',
+            label: 'Start',
+          })
         },
-        error: (err) => console.log(err)
+        error: (err) => {
+          console.log(err);
+          this.modalService.onOpen({
+            isOpen: true,
+            title: 'An error occurred',
+            message: 'message',
+            label: 'Close',
+          });
+          this.loading = false;
+        }
       });
     });
 
@@ -81,8 +107,13 @@ export class ArtistComponent implements OnInit, OnDestroy {
         this.score = res.score;
 
         if(res.gameOver) {
-          this.message = res.message;
           this.gameOver = true;
+          this.modalService.onOpen({
+            isOpen: true,
+            title: 'End of game',
+            message: 'res.message',
+            label: 'Close',
+          })
           this.gameSubscription.unsubscribe();
           window.scroll(0, 0);
         }
