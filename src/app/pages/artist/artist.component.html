@@ -1,43 +1,33 @@
 <div class="artist_wrapper">
-  <header class="artist_header">
-    <div class="artist_bio">
-      <img [src]="artist.images[0].url" [alt]="artist.name">
-      <strong>{{ artist.name }}</strong>
-    </div>
-    <div class="artist_score">
-      <strong>Can you guess all albums?</strong>
-      <strong>{{ score }}/{{ total }}</strong>
-    </div>
-    <div class="timer_showcase">
-      <img src="../../../../assets/icons/timer.png" alt="timer">
-      <strong>{{ timeLeft | time }}</strong>
-    </div>
-  </header>
+  <div *ngIf="!loading && artist; else loadComponent">
+    <header class="artist_header">
+      <div class="artist_bio">
+        <img [src]="artist.images[0].url" [alt]="artist.name">
+        <strong>{{ artist.name }}</strong>
+      </div>
+      <div class="artist_score">
+        <strong>Can you guess all albums?</strong>
+        <strong>{{ this.game.score }}/{{ this.game.total }}</strong>
+      </div>
+      <div class="timer_showcase">
+        <img src="../../../../assets/icons/timer.png" alt="timer">
+        <strong>{{ this.game.timeLeft | time }}</strong>
+      </div>
+    </header>
 
-  <section class="artist_section">
-    <ul class="artist_grid">
-      <app-form
-        *ngFor="let album of albums"
-        [album]="album"
-        [gameOver]="gameOver"
-        (onStatusUpdate)="onStatusUpdate($event)"
-      >
-      </app-form>
-    </ul>
-  </section>
+    <section class="artist_section">
+      <ul class="artist_grid">
+        <app-form
+          *ngFor="let album of albums"
+          [album]="album"
+          [gameOver]="this.game.isOver"
+        >
+        </app-form>
+      </ul>
+    </section>
+  </div>
 
-  <app-modal
-    title="Warning"
-    body='The game begins when you press "Start", and then you have a certain amount of time to guess all albums by this artist.'
-    [isOpen]="isWarningVisible"
-    (onModalClose)="onWarningClose()"
-  ></app-modal>
-
-  <app-modal
-    title="End of game"
-    [body]="message"
-    label="Close"
-    [isOpen]="gameOver"
-    (onModalClose)="returnToHome()"
-  ></app-modal>
+  <ng-template #loadComponent>
+    <app-loader></app-loader>
+  </ng-template>
 </div>

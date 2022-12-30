@@ -1,17 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ArtistInterface } from 'src/app/interfaces';
-import { SearchService } from 'src/app/shared/services';
+import { ModalService, SearchService } from 'src/app/shared/services';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   artists!: ArtistInterface[];
+  subscription!: Subscription;
+  loading: boolean =  false;
+
+  isErrorVisible: boolean = false;
+  message: string = '';
 
   constructor(
-    private searchService: SearchService
+    private searchService: SearchService,
+    private modalService: ModalService,
   ) {}
 
   getUserRegion(): string {
@@ -19,15 +26,33 @@ export class HomeComponent implements OnInit {
     return region;
   }
 
-  ngOnInit(): void {
+  getPopularArtists() {
     const region = this.getUserRegion();
 
-    this.searchService.searchPopularArtis(region).subscribe({
+    this.subscription = this.searchService.searchPopularArtis(region).subscribe({
       next: (res) => {
-        console.log(res);
         this.artists = res.artists.items
+        this.loading = false;
       },
-      error: (err) => console.log(err),
-    })
+      error: () => {
+        this.modalService.onOpen({
+          isOpen: true,
+          title: 'Ops!',
+          message: 'An error happened! Try again later.',
+          label: 'Close',
+          callback: () => {},
+        });
+        this.loading = false;
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.loading = true;
+    this.getPopularArtists();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
