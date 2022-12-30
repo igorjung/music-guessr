@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AlbumInterface } from 'src/app/interfaces';
+import { GameService } from '../../services';
 
 @Component({
   selector: 'app-form',
@@ -9,14 +10,15 @@ import { AlbumInterface } from 'src/app/interfaces';
 export class FormComponent {
   @Input() album!: AlbumInterface;
   @Input() gameOver!: boolean;
-  @Output() onStatusUpdate = new EventEmitter<string>();
 
   isCorrect: boolean = false;
+
+  constructor( private gameService: GameService ) {}
 
   onSubmit(cardInput: string) {
     if(cardInput.toUpperCase() === this.album.name.toUpperCase()) {
       this.isCorrect = true;
-      this.onStatusUpdate.emit('IS_CORRECT');
+      this.gameService.onGameScore();
     }
   }
 }

@@ -1,69 +1,101 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { GameInterface } from 'src/app/interfaces';
 
 @Injectable()
 export class GameService {
-  timeLeft: number = 60;
+  timer!: ReturnType<typeof setInterval>;
 
-  score: number = 0;
-  total: number = 0;
+  gameInfo = new BehaviorSubject<GameInterface>({
+    message: '',
+    timeLeft: 60,
+    score: 0,
+    total: 0,
+    isRunning: false,
+    isOver: false,
+  });
+  gameInfo$ = this.gameInfo.asObservable();
+  onGameNewChange(gameInfo: GameInterface) {
+    this.gameInfo.next(gameInfo);
+  }
 
   constructor() { }
 
-  setTime(total: number): number {
-    const extraTime = total - 10;
-    if(extraTime > 0) {
-      return this.timeLeft += extraTime*6;
-    }
+  onGameConfig(total: number): void {
+    const { timeLeft } = this.gameInfo.value;
+    const extraTime = (total - 10)*6;
 
-    return this.timeLeft;
+    this.onGameNewChange({
+      message: 'Game is ready to start!',
+      timeLeft: extraTime > 0 ? timeLeft + extraTime : timeLeft,
+      score: 0,
+      total,
+      isRunning: false,
+      isOver: false,
+    });
   }
 
-  onGameStart(total: number): Observable<GameInterface> {
-    this.total = total;
-    this.timeLeft = this.setTime(this.total);
+  onGameStart(): void {
+    this.onGameNewChange({
+      ...this.gameInfo.value,
+      isRunning: true,
+    });
+  }
 
+  onGameRunning(): Observable<GameInterface> {
     return new Observable((observer) => {
-      if(this.timeLeft > 0 && this.score < this.total) {
-        this.timeLeft--;
-        observer.next({
-          message: 'Time is runing',
-          timeLeft: this.timeLeft,
-          score: this.score,
-        })
-      } else  {
-        observer.next(this.onGameOver())
-      }
-    })
+      this.gameInfo$.subscribe({ next: (game) => {
+        console.log('!!!!', game);
+
+        if(game.isRunning) {
+          let { timeLeft, score, total } = game;
+
+          this.timer = setInterval(() => {
+            if(timeLeft && score < total) {
+              timeLeft--;
+              observer.next({
+                ...game,
+                timeLeft
+              });
+            } else {
+              clearInterval(this.timer);
+              observer.next({
+                ...game,
+                message: this.onGameOver(game),
+                isRunning: false,
+                isOver: true,
+              });
+            }
+          }, 1000);
+        } else {
+          observer.next(game);
+        }
+      }})
+    });
   }
 
-  onGameOver(): GameInterface {
-    if(this.score === this.total) {
-      return {
-        message: 'Congratulations! You won.',
-        timeLeft: this.timeLeft,
-        score: this.score,
-        gameOver: true
-      }
-    } else if ((this.score - this.total) >= 3) {
-      return {
-        message: 'To close! You lose.',
-        timeLeft: this.timeLeft,
-        score: this.score,
-        gameOver: true
-      }
-    } else {
-      return {
-        message: 'Maybe, next time! You lose.',
-        timeLeft: this.timeLeft,
-        score: this.score,
-        gameOver: true
-      }
+  onGameOver(game: GameInterface): string {
+    const { total, score } = game;
+
+    const scoreDifference = total - score;
+    let message = 'Maybe, next time! You lose.';
+    clearInterval(this.timer);
+
+    if(!scoreDifference) {
+      message = 'Congratulations! You won.';
+    } else if (scoreDifference < 3) {
+      message = 'To close! You lose.';
     }
+
+    return message;
   }
 
   onGameScore(): void {
-    this.score++;
+    const { score } = this.gameInfo.value;
+
+    this.onGameNewChange({
+      ...this.gameInfo.value,
+      score: score + 1,
+    });
   }
 }

@@ -3,4 +3,5 @@ export interface ModalInterface {
   title: string,
   message: string,
   label: string,
+  callback: () => void;
 }

@@ -21,13 +21,13 @@ export class SearchComponent {
   onSearch(value: string) {
     this.searchService.searchItem(value).subscribe({
       next: (res) => { this.list = res.artists.items || []; },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.modalService.onOpen({
           isOpen: true,
           title: 'An error occurred',
-          message: 'message',
+          message: 'An error happened! Try again later.',
           label: 'Close',
+          callback: () => {},
         });
       }
     })

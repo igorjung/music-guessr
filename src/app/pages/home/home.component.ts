@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArtistInterface } from 'src/app/interfaces';
 import { ModalService, SearchService } from 'src/app/shared/services';
@@ -20,7 +19,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private searchService: SearchService,
     private modalService: ModalService,
-    private router: Router
   ) {}
 
   getUserRegion(): string {
@@ -36,21 +34,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.artists = res.artists.items
         this.loading = false;
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
         this.modalService.onOpen({
           isOpen: true,
-          title: 'An error occurred',
-          message: 'message',
+          title: 'Ops!',
+          message: 'An error happened! Try again later.',
           label: 'Close',
+          callback: () => {},
         });
         this.loading = false;
       }
     });
-  }
-
-  returnToHome() {
-    this.router.navigate(['/']);
   }
 
   ngOnInit(): void {

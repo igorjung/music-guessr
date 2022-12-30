@@ -7,11 +7,11 @@
       </div>
       <div class="artist_score">
         <strong>Can you guess all albums?</strong>
-        <strong>{{ score }}/{{ total }}</strong>
+        <strong>{{ this.game.score }}/{{ this.game.total }}</strong>
       </div>
       <div class="timer_showcase">
         <img src="../../../../assets/icons/timer.png" alt="timer">
-        <strong>{{ timeLeft | time }}</strong>
+        <strong>{{ this.game.timeLeft | time }}</strong>
       </div>
     </header>
 
@@ -20,8 +20,7 @@
         <app-form
           *ngFor="let album of albums"
           [album]="album"
-          [gameOver]="gameOver"
-          (onStatusUpdate)="onStatusUpdate($event)"
+          [gameOver]="this.game.isOver"
         >
         </app-form>
       </ul>
