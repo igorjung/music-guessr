@@ -3,8 +3,6 @@ import { AlbumInterface } from "../interfaces";
 export function validateAlbums(albums: AlbumInterface[]) {
   let validatedAlbums: AlbumInterface[] = [];
 
-  console.log(validatedAlbums);
-
   albums.forEach(album => {
     const filterAlbumsByName = validatedAlbums.filter((item) =>
       item.name.toUpperCase() === album.name.toUpperCase()

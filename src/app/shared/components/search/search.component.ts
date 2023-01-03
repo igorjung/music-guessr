@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalService, SearchService } from '../../services';
 import { ArtistInterface } from '../../../interfaces';
 
@@ -9,6 +9,7 @@ import { ArtistInterface } from '../../../interfaces';
 })
 export class SearchComponent {
   list: ArtistInterface[] | [] = [];
+  serachInput!: string;
 
   isErrorVisible: boolean = false;
   message: string = '';
@@ -18,9 +19,15 @@ export class SearchComponent {
     private modalService: ModalService
   ) {}
 
-  onSearch(value: string) {
-    this.searchService.searchItem(value).subscribe({
-      next: (res) => { this.list = res.artists.items || []; },
+  onSearch() {
+    this.searchService.searchItem(this.serachInput).subscribe({
+      next: (res) => {
+        const list = res.artists.items.filter((item) =>
+          item.images.length &&
+          item.name
+        )
+        this.list = list;
+      },
       error: () => {
         this.modalService.onOpen({
           isOpen: true,
@@ -30,6 +37,10 @@ export class SearchComponent {
           callback: () => {},
         });
       }
-    })
+    });
+  }
+
+  onCloseList() {
+    this.list = [];
   }
 }

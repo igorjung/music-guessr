@@ -1,6 +1,9 @@
 <div class="artist_wrapper">
   <div *ngIf="!loading && artist; else loadComponent">
     <header class="artist_header">
+      <a href="/" class="return_button">
+        <img src="../../../assets/icons/back.png" alt="return">
+      </a>
       <div class="artist_bio">
         <img [src]="artist.images[0].url" [alt]="artist.name">
         <strong>{{ artist.name }}</strong>

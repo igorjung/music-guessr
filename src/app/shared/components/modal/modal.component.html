@@ -7,11 +7,13 @@
         <img src="../../../../assets/icons/close.png" alt="close">
       </button>
     </header>
-    <section class="modal_section">
-      <p>{{ modalInfo.message }}</p>
-      <div class="modal_footer">
-        <button (click)="modalService.onClose()">{{ modalInfo.label }}</button>
-      </div>
+    <section
+      class="modal_section"
+      [innerHtml]="modalInfo.message"
+    >
     </section>
+    <footer class="modal_footer">
+      <button (click)="modalService.onClose()">{{ modalInfo.label }}</button>
+    </footer>
   </div>
 </div>

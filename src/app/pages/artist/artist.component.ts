@@ -37,6 +37,8 @@ export class ArtistComponent implements OnInit, OnDestroy {
       next: (game) => {
         this.game = game;
 
+        // console.log('######', game);
+
         if(!game.isRunning && game.isOver) {
           this.modalService.onOpen({
             isOpen: true,

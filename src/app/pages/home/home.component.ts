@@ -47,6 +47,37 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  onInfoButtonClick() {
+    this.modalService.onOpen({
+      isOpen: true,
+      title: 'About',
+      message: `
+        <p>
+          Hi, im <b>Igor Jung</b>. This is <b>MusicGuessr</b> a music game, where you choose your favorite artist and try to guess they album's names.
+        </p>
+
+        <p>
+          This site uses
+          <a
+            href="https://developer.spotify.com/documentation/web-api/"
+            target="_blank"
+          >Spotify API</a>
+          . Icons created by
+          <a
+            href="https://www.flaticon.com/authors/freepik"
+            target="_blank"
+          >Freepik - Flaticon</a>
+        </p>
+
+        <small>
+          All rights go to the rightful owners - no copyright infringement intended.
+        </small>
+      `,
+      label: 'Close',
+      callback: () => {},
+    });
+  }
+
   ngOnInit(): void {
     this.loading = true;
     this.getPopularArtists();
