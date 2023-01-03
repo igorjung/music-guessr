@@ -40,33 +40,25 @@ export class GameService {
       ...this.gameInfo.value,
       isRunning: true,
     });
+    this.onGameTimerRun();
   }
 
   onGameRunning(): Observable<GameInterface> {
     return new Observable((observer) => {
       this.gameInfo$.subscribe({ next: (game) => {
-        console.log('!!!!', game);
-
         if(game.isRunning) {
           let { timeLeft, score, total } = game;
 
-          this.timer = setInterval(() => {
-            if(timeLeft && score < total) {
-              timeLeft--;
-              observer.next({
-                ...game,
-                timeLeft
-              });
-            } else {
-              clearInterval(this.timer);
-              observer.next({
-                ...game,
-                message: this.onGameOver(game),
-                isRunning: false,
-                isOver: true,
-              });
-            }
-          }, 1000);
+          if(!timeLeft || score >= total) {
+            observer.next({
+              ...game,
+              message: this.onGameOver(game),
+              isRunning: false,
+              isOver: true,
+            });
+          } else {
+            observer.next(game);
+          }
         } else {
           observer.next(game);
         }
@@ -97,5 +89,23 @@ export class GameService {
       ...this.gameInfo.value,
       score: score + 1,
     });
+  }
+
+  onGameTimerRun(): void {
+    let { timeLeft } = this.gameInfo.value;
+
+    console.log(timeLeft);
+
+    this.timer = setInterval(() => {
+      if(timeLeft) {
+        timeLeft--;
+        this.onGameNewChange({
+          ...this.gameInfo.value,
+          timeLeft: timeLeft - 1,
+        });
+      } else {
+        clearInterval(this.timer);
+      }
+    }, 1000);
   }
 }

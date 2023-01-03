@@ -1,5 +1,17 @@
 <header class="home_header">
+  <div></div>
   <app-search></app-search>
+  <nav class="home_nav">
+    <button (click)="onInfoButtonClick()">
+      i
+    </button>
+    <a
+      href="https://developer.spotify.com/documentation/web-api/"
+      target="_blank"
+    >
+      <img src="../../../assets/icons/spotify.png" alt="spotify icon">
+    </a>
+  </nav>
 </header>
 
 <section class="home_section" *ngIf="!loading; else loadComponent">

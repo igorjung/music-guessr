@@ -10,6 +10,7 @@
 }
 
 .artist_header {
+  position: relative;
   width: 100%;
 
   display: flex;
@@ -17,6 +18,27 @@
   justify-content: space-between;
 
   padding-top: 64px;
+
+  .return_button {
+    position: absolute;
+    top: 16px;
+    left: -32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $white;
+    border-radius: 100px;
+
+    height: 30px;
+    width: 30px;
+
+    img {
+      height: 16px;
+      width: 16px;
+      object-fit: cover;
+    }
+  }
 
   .artist_bio {
     display: flex;

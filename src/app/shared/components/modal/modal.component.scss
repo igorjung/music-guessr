@@ -64,35 +64,48 @@
   align-items: flex-start;
   justify-content: space-between;
 
-  p {
+  text-align: center;
+
+  .common_text {
     font-size: 18px;
     text-align: center;
   }
 
-  .modal_footer{
-    width: 100%;
+  .hyperlink_text {
+    font-size: 18px;
+    font-weight: bold;
+    color: $green;
+  }
+
+  small.small_text {
+    font-size: 14px;
+    color: $dark_gray;
+  }
+}
+
+.modal_footer{
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32px;
+
+  button {
+    width: 150px;
+    height: 40px;
 
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 32px;
 
-    button {
-      width: 150px;
-      height: 40px;
+    border-radius: 20px;
+    background-color: $black;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    color: $white;
+    font-size: 18px;
+    font-weight: bold;
 
-      border-radius: 20px;
-      background-color: $black;
-
-      color: $white;
-      font-size: 18px;
-      font-weight: bold;
-
-      cursor: pointer;
-    }
+    cursor: pointer;
   }
 }

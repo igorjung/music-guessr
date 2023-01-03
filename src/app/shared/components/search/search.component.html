@@ -1,7 +1,7 @@
 <div class="search_wrapper" [ngClass]="{ 'is_open': list.length > 0}">
   <button
     class="search_button"
-    (click)="onSearch(searchInput.value)"
+    (click)="onSearch()"
   >
     <img src="../../../../assets/icons/search.png" alt="search">
   </button>
@@ -10,8 +10,9 @@
     type="text"
     class="search_input"
     placeholder="Search for an artist..."
-    (change)="onSearch(searchInput.value)"
-    #searchInput
+    [(ngModel)] ="serachInput"
+    (ngModelChange)="onSearch()"
+    (blur)="onCloseList()"
   />
   <ul
     class="search_list"
